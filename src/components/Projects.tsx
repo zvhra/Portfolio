@@ -1,10 +1,10 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useInView } from '../hooks/useInView';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
+import { faExternalLinkAlt, faBriefcase } from '@fortawesome/free-solid-svg-icons';
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
+import Section from './Section';
 
 interface Project {
   title: string;
@@ -55,7 +55,7 @@ const projects: Project[] = [
     preview:
       'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=400&fit=crop',
     tags: ['C#', 'Console App', 'OOP', 'JSON', 'Banking'],
-    featured: false,
+    featured: true,
   },
   {
     title: 'Movie API Solution',
@@ -94,25 +94,25 @@ const projects: Project[] = [
     preview:
       'https://github.com/zvhra/gadgets/blob/main/preview-image.png?raw=true',
     tags: ['Desktop App', 'C#', 'Data Storage', 'Windows Forms'],
+    featured: true,
   },
 ];
 
 export default function Projects() {
-  const [ref, inView] = useInView({ threshold: 0.1 });
   const [hoveredProject, setHoveredProject] = useState<number | null>(null);
 
   return (
-    <section
-      ref={ref}
+    <Section
       id="projects"
-      className={`projects-section fade-in ${inView ? 'visible' : ''}`}
-      aria-labelledby="projects-heading"
+      className="projects-section"
+      ariaLabelledBy="projects-heading"
     >
-      <h2 id="projects-heading">Featured Projects</h2>
-      <p className="projects-intro">
-        A curated collection of projects showcasing my technical expertise and 
-        experience in full-stack development, software engineering, and innovative problem-solving.
-      </p>
+      <h2 id="projects-heading" className="section-title">
+        <span className="section-title-icon">
+          <FontAwesomeIcon icon={faBriefcase} />
+        </span>
+        <span className="section-title-text">Featured Projects</span>
+      </h2>
       <div className="project-grid">
         {projects.map((project, index) => (
           <div
@@ -191,7 +191,7 @@ export default function Projects() {
           </div>
         ))}
       </div>
-    </section>
+    </Section>
   );
 }
 

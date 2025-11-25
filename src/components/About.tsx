@@ -1,14 +1,8 @@
 'use client';
 
 import React from 'react';
-import { useInView } from '../hooks/useInView';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faMapMarkerAlt,
-  faGraduationCap,
-  faCode,
-  faBriefcase,
-} from '@fortawesome/free-solid-svg-icons';
+import { faCode } from '@fortawesome/free-solid-svg-icons';
 import {
   faReact,
   faPython,
@@ -18,62 +12,52 @@ import {
   faNodeJs,
   faGitAlt,
   faMicrosoft,
+  faVuejs,
+  faDocker,
+  faAws,
+  faJava,
 } from '@fortawesome/free-brands-svg-icons';
+import { faDatabase } from '@fortawesome/free-solid-svg-icons';
+import Image from 'next/image';
+import Section from './Section';
+import GitHubCalendar from './GitHubCalendar';
 
 const skills = [
-  { name: 'HTML5', icon: faHtml5, level: 90 },
-  { name: 'CSS3', icon: faCss3Alt, level: 90 },
-  { name: 'JavaScript', icon: faJsSquare, level: 85 },
-  { name: 'React', icon: faReact, level: 85 },
-  { name: 'Python', icon: faPython, level: 80 },
-  { name: 'Node.js', icon: faNodeJs, level: 75 },
-  { name: 'Git', icon: faGitAlt, level: 85 },
-  { name: 'C#', icon: faMicrosoft, level: 85 },
+  { name: 'HTML5', icon: faHtml5, color: '#E34F26', isImage: false },
+  { name: 'CSS3', icon: faCss3Alt, color: '#1572B6', isImage: false },
+  { name: 'JavaScript', icon: faJsSquare, color: '#F7DF1E', isImage: false },
+  { name: 'TypeScript', icon: null, color: '#3178C6', isImage: true, imagePath: '/typescript.svg' },
+  { name: 'React', icon: faReact, color: '#61DAFB', isImage: false },
+  { name: 'Vue.js', icon: faVuejs, color: '#4FC08D', isImage: false },
+  { name: 'Tailwind CSS', icon: null, color: '#06B6D4', isImage: true, imagePath: '/Tailwind_CSS_Logo.svg' },
+  { name: 'Node.js', icon: faNodeJs, color: '#339933', isImage: false },
+  { name: 'Python', icon: faPython, color: '#3776AB', isImage: false },
+  { name: 'Java', icon: faJava, color: '#ED8B00', isImage: false },
+  { name: 'C#', icon: faMicrosoft, color: '#239120', isImage: false },
+  { name: '.NET Core', icon: faMicrosoft, color: '#512BD4', isImage: false },
+  { name: 'ASP.NET', icon: faMicrosoft, color: '#512BD4', isImage: false },
+  { name: 'MongoDB', icon: faDatabase, color: '#47A248', isImage: false },
+  { name: 'SQL Server', icon: faDatabase, color: '#CC2927', isImage: false },
+  { name: 'Docker', icon: faDocker, color: '#2496ED', isImage: false },
+  { name: 'AWS', icon: faAws, color: '#FF9900', isImage: false },
+  { name: 'Azure', icon: faMicrosoft, color: '#0078D4', isImage: false },
+  { name: 'Git', icon: faGitAlt, color: '#F05032', isImage: false },
 ];
 
 export default function About() {
-  const [ref, inView] = useInView({ threshold: 0.1 });
-
   return (
-    <section
-      ref={ref}
+    <Section
       id="about-tech"
-      className={`about-tech-section fade-in ${inView ? 'visible' : ''}`}
-      aria-labelledby="about-heading"
+      className="about-tech-section"
+      ariaLabelledBy="about-heading"
     >
       <div className="about-container">
-        <h2 id="about-heading">About Me</h2>
-        <div className="about-content">
-          <p className="about-description">
-            I&apos;m a Computing Graduate with a Bachelor&apos;s Honours degree. I have
-            hands-on experience in full-stack development, software engineering,
-            and project management, demonstrated through various projects,
-            including a fitness social media platform and an Internet Relay Chat
-            system. My skills span across C#, Python, Java, and web technologies,
-            with a strong focus on creating efficient, user-centric applications.
-          </p>
-
-          <div className="about-details">
-            <div className="detail-item">
-              <FontAwesomeIcon icon={faMapMarkerAlt} aria-hidden="true" />
-              <span>London, UK</span>
-            </div>
-            <div className="detail-item">
-              <FontAwesomeIcon icon={faGraduationCap} aria-hidden="true" />
-              <span>BSc (Hons) Computing</span>
-            </div>
-            <div className="detail-item">
-              <FontAwesomeIcon icon={faBriefcase} aria-hidden="true" />
-              <span>Full Stack Developer</span>
-            </div>
-            <div className="detail-item">
-              <FontAwesomeIcon icon={faCode} aria-hidden="true" />
-              <span>Proficient in C# & Python</span>
-            </div>
-          </div>
-        </div>
-
-        <h2 id="skills-heading">Tech Stack</h2>
+        <h2 id="skills-heading" className="section-title">
+          <span className="section-title-icon">
+            <FontAwesomeIcon icon={faCode} />
+          </span>
+          <span className="section-title-text">Tech Stack</span>
+        </h2>
         <div className="skills-grid">
           {skills.map((skill, index) => (
             <div
@@ -83,26 +67,33 @@ export default function About() {
                 animationDelay: `${index * 0.1}s`,
               }}
             >
-              <div className="skill-icon">
-                <FontAwesomeIcon icon={skill.icon} />
+              <div className="skill-icon" style={{ color: skill.color }}>
+                {skill.isImage ? (
+                  <Image 
+                    src={skill.imagePath!} 
+                    alt={skill.name} 
+                    width={48} 
+                    height={48}
+                    unoptimized
+                    className={skill.name === 'TypeScript' ? 'typescript-icon' : ''}
+                    style={skill.name === 'TypeScript' ? { width: '48px', height: '48px' } : {}}
+                  />
+                ) : (
+                  <FontAwesomeIcon icon={skill.icon!} />
+                )}
               </div>
               <div className="skill-info">
                 <span className="skill-name">{skill.name}</span>
-                <div className="skill-bar">
-                  <div
-                    className="skill-progress"
-                    style={{
-                      width: inView ? `${skill.level}%` : '0%',
-                      transition: `width 1s ease-out ${index * 0.1}s`,
-                    }}
-                  />
-                </div>
               </div>
             </div>
           ))}
         </div>
+        
+        <div className="github-calendar-section">
+          <GitHubCalendar />
+        </div>
       </div>
-    </section>
+    </Section>
   );
 }
 
