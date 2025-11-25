@@ -50,4 +50,4 @@ GITHUB_TOKEN=your_github_token_here
 
 ---
 
-Built with ❤️ by Zahra Ahmed
+Built by Zahra Ahmed
