@@ -75,16 +75,6 @@ export default function GitHubCalendar() {
     return colors[level] || colors[0];
   };
 
-  const getLightModeColor = (level: number) => {
-    const colors = [
-      'rgba(0, 119, 182, 0.1)',
-      'rgba(0, 119, 182, 0.3)',
-      'rgba(0, 119, 182, 0.5)',
-      'rgba(0, 119, 182, 0.7)',
-      'rgba(0, 119, 182, 1)',
-    ];
-    return colors[level] || colors[0];
-  };
 
   // Group contributions by week (7 days)
   const weeks: ContributionDay[][] = [];

@@ -61,8 +61,17 @@ export async function GET() {
     const weeks = data.data.user.contributionsCollection.contributionCalendar.weeks;
     const contributions: Array<{ date: string; count: number; level: number }> = [];
 
-    weeks.forEach((week: any) => {
-      week.contributionDays.forEach((day: any) => {
+    interface ContributionDay {
+      date: string;
+      contributionCount: number;
+    }
+
+    interface Week {
+      contributionDays: ContributionDay[];
+    }
+
+    weeks.forEach((week: Week) => {
+      week.contributionDays.forEach((day: ContributionDay) => {
         const level = day.contributionCount === 0 ? 0 :
                       day.contributionCount <= 3 ? 1 :
                       day.contributionCount <= 7 ? 2 :
