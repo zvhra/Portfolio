@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, FormEvent } from 'react';
+import { useState, FormEvent } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faPaperPlane,
@@ -16,12 +16,19 @@ interface FormData {
   message: string;
 }
 
+interface FormErrors {
+  name?: string;
+  email?: string;
+  message?: string;
+}
+
 export default function Contact() {
   const [formData, setFormData] = useState<FormData>({
     name: '',
     email: '',
     message: '',
   });
+  const [errors, setErrors] = useState<FormErrors>({});
   const [submitting, setSubmitting] = useState(false);
   const [status, setStatus] = useState<{
     message: string;
@@ -33,10 +40,55 @@ export default function Contact() {
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    // Clear error for this field when user starts typing
+    if (errors[name as keyof FormErrors]) {
+      setErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors[name as keyof FormErrors];
+        return newErrors;
+      });
+    }
+  };
+
+  const validateForm = (): boolean => {
+    const newErrors: FormErrors = {};
+
+    // Validate name
+    if (!formData.name.trim()) {
+      newErrors.name = 'Name is required';
+    }
+
+    // Validate email
+    if (!formData.email.trim()) {
+      newErrors.email = 'Email is required';
+    } else {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(formData.email)) {
+        newErrors.email = 'Please enter a valid email address';
+      }
+    }
+
+    // Validate message
+    if (!formData.message.trim()) {
+      newErrors.message = 'Message is required';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    
+    // Validate form before submission
+    if (!validateForm()) {
+      setStatus({
+        message: 'Please fill in all required fields correctly.',
+        type: 'error',
+      });
+      return;
+    }
+
     setSubmitting(true);
     setStatus({ message: '', type: '' });
 
@@ -53,6 +105,7 @@ export default function Contact() {
           type: 'success',
         });
         setFormData({ name: '', email: '', message: '' });
+        setErrors({});
       } else {
         setStatus({
           message: 'Something went wrong. Please try again later.',
@@ -75,44 +128,72 @@ export default function Contact() {
       className="contact-section"
       ariaLabelledBy="contact-heading"
     >
-      <h2 id="contact-heading" className="section-title">
-        <span className="section-title-icon">
-          <FontAwesomeIcon icon={faEnvelope} />
-        </span>
-        <span className="section-title-text">Get in Touch!</span>
-      </h2>
-      <p className="contact-intro">
-        Have a question or just want to reach out? I&apos;d love to hear from you.
-        Fill out the form below and I&apos;ll get back to you soon.
-      </p>
+      <div className="contact-box">
+        <h2 id="contact-heading" className="section-title">
+          <span className="section-title-icon">
+            <FontAwesomeIcon icon={faEnvelope} aria-hidden="true" />
+          </span>
+          <span className="section-title-text">Get in Touch!</span>
+        </h2>
+        <p className="contact-intro">
+          Have a question or just want to reach out? I&apos;d love to hear from you.
+          Fill out the form below and I&apos;ll get back to you soon.
+        </p>
 
-      <form className="contact-form" onSubmit={handleSubmit} noValidate>
-        <input
-          name="name"
-          type="text"
-          value={formData.name}
-          onChange={handleChange}
-          placeholder="Drop a name"
-          required
-        />
+        <form className="contact-form" onSubmit={handleSubmit} noValidate>
+        <div className="form-field">
+          <input
+            name="name"
+            type="text"
+            value={formData.name}
+            onChange={handleChange}
+            placeholder="Drop a name"
+            required
+            aria-invalid={errors.name ? 'true' : 'false'}
+            aria-describedby={errors.name ? 'name-error' : undefined}
+          />
+          {errors.name && (
+            <span id="name-error" className="field-error" role="alert">
+              {errors.name}
+            </span>
+          )}
+        </div>
 
-        <input
-          name="email"
-          type="email"
-          value={formData.email}
-          onChange={handleChange}
-          placeholder="Wanna hear back? Add your email"
-          required
-        />
+        <div className="form-field">
+          <input
+            name="email"
+            type="email"
+            value={formData.email}
+            onChange={handleChange}
+            placeholder="Wanna hear back? Add your email"
+            required
+            aria-invalid={errors.email ? 'true' : 'false'}
+            aria-describedby={errors.email ? 'email-error' : undefined}
+          />
+          {errors.email && (
+            <span id="email-error" className="field-error" role="alert">
+              {errors.email}
+            </span>
+          )}
+        </div>
 
-        <textarea
-          name="message"
-          value={formData.message}
-          onChange={handleChange}
-          placeholder="Say hello or drop a note..."
-          rows={6}
-          required
-        />
+        <div className="form-field">
+          <textarea
+            name="message"
+            value={formData.message}
+            onChange={handleChange}
+            placeholder="Say hello or drop a note..."
+            rows={6}
+            required
+            aria-invalid={errors.message ? 'true' : 'false'}
+            aria-describedby={errors.message ? 'message-error' : undefined}
+          />
+          {errors.message && (
+            <span id="message-error" className="field-error" role="alert">
+              {errors.message}
+            </span>
+          )}
+        </div>
 
         <button
           type="submit"
@@ -121,17 +202,17 @@ export default function Contact() {
         >
           {submitting ? (
             <>
-              <FontAwesomeIcon icon={faSpinner} spin />
+              <FontAwesomeIcon icon={faSpinner} spin aria-hidden="true" />
               <span>Sending...</span>
             </>
           ) : status.type === 'success' ? (
             <>
-              <FontAwesomeIcon icon={faCheckCircle} />
+              <FontAwesomeIcon icon={faCheckCircle} aria-hidden="true" />
               <span>Message Sent</span>
             </>
           ) : (
             <>
-              <FontAwesomeIcon icon={faPaperPlane} />
+              <FontAwesomeIcon icon={faPaperPlane} aria-hidden="true" />
               <span>Send Message</span>
             </>
           )}
@@ -140,12 +221,13 @@ export default function Contact() {
         {status.message && (
           <div className={`status-message ${status.type}`} role="alert">
             {status.type === 'success' && (
-              <FontAwesomeIcon icon={faCheckCircle} />
+              <FontAwesomeIcon icon={faCheckCircle} aria-hidden="true" />
             )}
             {status.message}
           </div>
         )}
-      </form>
+        </form>
+      </div>
     </Section>
   );
 }

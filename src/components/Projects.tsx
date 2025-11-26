@@ -1,10 +1,11 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExternalLinkAlt, faBriefcase } from '@fortawesome/free-solid-svg-icons';
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
 import Section from './Section';
+import GitHubCalendar from './GitHubCalendar';
 
 interface Project {
   title: string;
@@ -109,20 +110,20 @@ export default function Projects() {
     >
       <h2 id="projects-heading" className="section-title">
         <span className="section-title-icon">
-          <FontAwesomeIcon icon={faBriefcase} />
+          <FontAwesomeIcon icon={faBriefcase} aria-hidden="true" />
         </span>
         <span className="section-title-text">Featured Projects</span>
       </h2>
       <div className="project-grid">
         {projects.map((project, index) => (
           <div
-            key={index}
+            key={`project-${project.title}-${index}`}
             className={`project-card ${project.featured ? 'featured' : ''}`}
             onMouseEnter={() => setHoveredProject(index)}
             onMouseLeave={() => setHoveredProject(null)}
             onClick={() => {
-              if (typeof window !== 'undefined') {
-                window.open(project.link, '_blank', 'noopener,noreferrer');
+              if (typeof window !== 'undefined' && project.link) {
+                window.open(project.link, '_blank', 'noopener');
               }
             }}
             style={{
@@ -133,8 +134,8 @@ export default function Projects() {
             onKeyDown={(e) => {
               if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
-                if (typeof window !== 'undefined') {
-                  window.open(project.link, '_blank', 'noopener,noreferrer');
+                if (typeof window !== 'undefined' && project.link) {
+                  window.open(project.link, '_blank', 'noopener');
                 }
               }
             }}
@@ -147,6 +148,12 @@ export default function Projects() {
                 alt={`${project.title} Preview`}
                 className="project-image"
                 loading="lazy"
+                onError={(e) => {
+                  // Fallback to a placeholder if image fails to load
+                  const target = e.target as HTMLImageElement;
+                  target.src = 'https://via.placeholder.com/800x400/1a1a1f/8892b0?text=Project+Preview';
+                  target.alt = `${project.title} Preview (Image unavailable)`;
+                }}
               />
               <div
                 className={`project-overlay ${hoveredProject === index ? 'visible' : ''}`}
@@ -161,7 +168,7 @@ export default function Projects() {
                       aria-label={`View ${project.title} on GitHub`}
                       onClick={(e) => e.stopPropagation()}
                     >
-                      <FontAwesomeIcon icon={faGithub} />
+                      <FontAwesomeIcon icon={faGithub} aria-hidden="true" />
                     </a>
                   )}
                   <a
@@ -172,7 +179,7 @@ export default function Projects() {
                     aria-label={`View ${project.title}`}
                     onClick={(e) => e.stopPropagation()}
                   >
-                    <FontAwesomeIcon icon={faExternalLinkAlt} />
+                    <FontAwesomeIcon icon={faExternalLinkAlt} aria-hidden="true" />
                   </a>
                 </div>
               </div>
@@ -182,7 +189,7 @@ export default function Projects() {
               <p>{project.description}</p>
               <div className="project-tags">
                 {project.tags.map((tag, i) => (
-                  <span key={i} className="tag">
+                  <span key={`${project.title}-tag-${tag}-${i}`} className="tag">
                     {tag}
                   </span>
                 ))}
@@ -190,6 +197,9 @@ export default function Projects() {
             </div>
           </div>
         ))}
+      </div>
+      <div className="github-calendar-section">
+        <GitHubCalendar />
       </div>
     </Section>
   );

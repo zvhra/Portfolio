@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLinkedinIn, faGithub } from '@fortawesome/free-brands-svg-icons';
 import { faMapMarkerAlt, faCode, faLaptopCode, faDatabase } from '@fortawesome/free-solid-svg-icons';
@@ -45,7 +45,7 @@ export default function Hero() {
 
         <div className="hero-right">
           <div className="hero-location">
-            <FontAwesomeIcon icon={faMapMarkerAlt} />
+            <FontAwesomeIcon icon={faMapMarkerAlt} aria-hidden="true" />
             <span>London, UK</span>
           </div>
           <div className="social-contact-group">
@@ -57,7 +57,7 @@ export default function Hero() {
                 rel="noreferrer noopener"
                 aria-label="Visit my GitHub profile"
               >
-                <FontAwesomeIcon icon={faGithub} />
+                <FontAwesomeIcon icon={faGithub} aria-hidden="true" />
               </a>
               <a
                 href="https://www.linkedin.com/in/zfahmed/"
@@ -66,7 +66,7 @@ export default function Hero() {
                 rel="noreferrer noopener"
                 aria-label="Visit my LinkedIn profile"
               >
-                <FontAwesomeIcon icon={faLinkedinIn} />
+                <FontAwesomeIcon icon={faLinkedinIn} aria-hidden="true" />
               </a>
             </div>
             <a
@@ -74,7 +74,7 @@ export default function Hero() {
               className="schedule-call-btn"
               aria-label="Contact me"
             >
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                 <path d="M8 0C3.58 0 0 3.58 0 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6zm.5-9H7v4h4V6.5h-2.5V5z" fill="currentColor"/>
               </svg>
               Contact
@@ -89,7 +89,7 @@ export default function Hero() {
           <div className="service-cards">
             <div className="service-card">
               <div className="service-icon">
-                <FontAwesomeIcon icon={faCode} />
+                <FontAwesomeIcon icon={faCode} aria-hidden="true" />
               </div>
               <div className="service-content">
                 <h4 className="service-title">Frontend Development</h4>
@@ -98,7 +98,7 @@ export default function Hero() {
             </div>
             <div className="service-card">
               <div className="service-icon">
-                <FontAwesomeIcon icon={faDatabase} />
+                <FontAwesomeIcon icon={faDatabase} aria-hidden="true" />
               </div>
               <div className="service-content">
                 <h4 className="service-title">Backend Development</h4>
@@ -107,7 +107,7 @@ export default function Hero() {
             </div>
             <div className="service-card">
               <div className="service-icon">
-                <FontAwesomeIcon icon={faLaptopCode} />
+                <FontAwesomeIcon icon={faLaptopCode} aria-hidden="true" />
               </div>
               <div className="service-content">
                 <h4 className="service-title">Full Stack Solutions</h4>

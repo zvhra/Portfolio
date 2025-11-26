@@ -58,7 +58,23 @@ export async function GET() {
       throw new Error(data.errors[0].message);
     }
 
-    const weeks = data.data.user.contributionsCollection.contributionCalendar.weeks;
+    // Validate response structure before accessing nested properties
+    if (!data.data || !data.data.user) {
+      throw new Error('User not found or access denied');
+    }
+
+    const user = data.data.user;
+    if (!user.contributionsCollection || !user.contributionsCollection.contributionCalendar) {
+      throw new Error('Contributions data not available');
+    }
+
+    const contributionCalendar = user.contributionsCollection.contributionCalendar;
+    const weeks = contributionCalendar.weeks;
+
+    if (!weeks || !Array.isArray(weeks)) {
+      throw new Error('Invalid contributions data structure');
+    }
+
     const contributions: Array<{ date: string; count: number; level: number }> = [];
 
     interface ContributionDay {
@@ -71,23 +87,25 @@ export async function GET() {
     }
 
     weeks.forEach((week: Week) => {
-      week.contributionDays.forEach((day: ContributionDay) => {
-        const level = day.contributionCount === 0 ? 0 :
-                      day.contributionCount <= 3 ? 1 :
-                      day.contributionCount <= 7 ? 2 :
-                      day.contributionCount <= 15 ? 3 : 4;
-        
-        contributions.push({
-          date: day.date,
-          count: day.contributionCount,
-          level,
+      if (week && week.contributionDays && Array.isArray(week.contributionDays)) {
+        week.contributionDays.forEach((day: ContributionDay) => {
+          const level = day.contributionCount === 0 ? 0 :
+                        day.contributionCount <= 3 ? 1 :
+                        day.contributionCount <= 7 ? 2 :
+                        day.contributionCount <= 15 ? 3 : 4;
+          
+          contributions.push({
+            date: day.date,
+            count: day.contributionCount,
+            level,
+          });
         });
-      });
+      }
     });
 
     return NextResponse.json({
       contributions,
-      totalContributions: data.data.user.contributionsCollection.contributionCalendar.totalContributions,
+      totalContributions: contributionCalendar.totalContributions || 0,
     });
   } catch (error) {
     console.error('Error fetching GitHub contributions:', error);

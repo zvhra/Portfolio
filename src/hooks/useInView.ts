@@ -22,10 +22,13 @@ export function useInView(options: UseInViewOptions = {}) {
 
     const observer = new IntersectionObserver(
       ([entry]) => {
+        // Double-check element still exists
+        if (!ref.current) return;
+        
         if (entry.isIntersecting) {
           setInView(true);
-          if (triggerOnce) {
-            observer.unobserve(element);
+          if (triggerOnce && ref.current) {
+            observer.unobserve(ref.current);
           }
         } else if (!triggerOnce) {
           setInView(false);
@@ -40,6 +43,7 @@ export function useInView(options: UseInViewOptions = {}) {
       if (element) {
         observer.unobserve(element);
       }
+      observer.disconnect();
     };
   }, [threshold, rootMargin, triggerOnce]);
 

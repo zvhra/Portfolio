@@ -1,10 +1,7 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
-import { SunIcon, MoonIcon } from '@heroicons/react/24/outline';
-import { useRouter } from 'next/navigation';
+import { useState, useRef, useEffect } from 'react';
+import Navbar from '@/components/Navbar';
 import './terminal.css';
 
 interface Command {
@@ -18,8 +15,6 @@ const TerminalPage = () => {
   const [input, setInput] = useState('');
   const [commandHistory, setCommandHistory] = useState<string[]>([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
-  const router = useRouter();
-  const [isLight, setIsLight] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const terminalOutputRef = useRef<HTMLDivElement>(null);
 
@@ -33,27 +28,6 @@ const TerminalPage = () => {
     setOutput(welcomeMessage);
   }, []);
 
-  // Read saved theme from localStorage and apply class on mount (client-side only)
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const savedTheme = localStorage.getItem('theme');
-      if (savedTheme === 'light') {
-        setIsLight(true);
-        document.body.classList.add('light-mode');
-      } else {
-        setIsLight(false);
-        document.body.classList.remove('light-mode');
-      }
-    }
-  }, []);
-
-  // Toggle the "light-mode" class on <body> when isLight changes
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      document.body.classList.toggle('light-mode', isLight);
-      localStorage.setItem('theme', isLight ? 'light' : 'dark');
-    }
-  }, [isLight]);
 
   // Scroll to the bottom when new content is added
   useEffect(() => {
@@ -67,9 +41,6 @@ const TerminalPage = () => {
     inputRef.current?.focus();
   }, []);
 
-  const toggleTheme = () => {
-    setIsLight((prev) => !prev);
-  };
 
   const commands: Record<string, Command> = {
     help: {
@@ -231,7 +202,9 @@ const TerminalPage = () => {
       name: 'exit',
       description: 'Return to homepage',
       execute: () => {
-        router.push('/');
+        if (typeof window !== 'undefined') {
+          window.location.href = '/';
+        }
         return 'Returning to homepage...';
       },
     },
@@ -320,61 +293,44 @@ const TerminalPage = () => {
   };
 
   return (
-    <div className="terminal-container">
-      <div className="terminal-header">
-        <button
-          onClick={() => router.push('/')}
-          className="terminal-back-button"
-          aria-label="Return to homepage"
-        >
-          <FontAwesomeIcon icon={faArrowLeft} />
-        </button>
-        <button
-          onClick={toggleTheme}
-          className="light-mode-button"
-          aria-label={`Switch to ${isLight ? 'dark' : 'light'} mode`}
-        >
-          {isLight ? (
-            <SunIcon className="w-5 h-5" aria-hidden="true" />
-          ) : (
-            <MoonIcon className="w-5 h-5" aria-hidden="true" />
-          )}
-        </button>
-        <div className="terminal-label">/terminal</div>
-      </div>
-      <div className="terminal-box">
-        <div className="terminal-window-controls">
-          <div className="control-btn" aria-label="Close window">
-            <span className="control-dot close"></span>
-          </div>
-          <div className="control-btn" aria-label="Minimize window">
-            <span className="control-dot minimize"></span>
-          </div>
-          <div className="control-btn" aria-label="Maximize window">
-            <span className="control-dot maximize"></span>
-          </div>
-        </div>
-        <div className="terminal-output" ref={terminalOutputRef}>
-          {output.map((line, i) => (
-            <div key={i} className="terminal-line">
-              {line}
+    <div className="terminal-page">
+      <Navbar />
+      <div className="terminal-container">
+        <div className="terminal-box">
+          <div className="terminal-window-controls">
+            <div className="control-btn" aria-label="Close window">
+              <span className="control-dot close"></span>
             </div>
-          ))}
-          <div className="terminal-input-line">
-            <span className="terminal-arrow">&gt;</span>
-            <input
-              ref={inputRef}
-              type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={handleKeyDown}
-              className="terminal-input-field"
-              autoFocus
-              autoComplete="off"
-              spellCheck="false"
-              aria-label="Terminal input"
-            />
-            <span className="terminal-cursor">█</span>
+            <div className="control-btn" aria-label="Minimize window">
+              <span className="control-dot minimize"></span>
+            </div>
+            <div className="control-btn" aria-label="Maximize window">
+              <span className="control-dot maximize"></span>
+            </div>
+            <div className="terminal-path">/terminal</div>
+          </div>
+          <div className="terminal-output" ref={terminalOutputRef}>
+            {output.map((line, i) => (
+              <div key={`terminal-line-${i}-${line.substring(0, Math.min(20, line.length))}`} className="terminal-line">
+                {line}
+              </div>
+            ))}
+            <div className="terminal-input-line">
+              <span className="terminal-arrow">&gt;</span>
+              <input
+                ref={inputRef}
+                type="text"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={handleKeyDown}
+                className="terminal-input-field"
+                autoFocus
+                autoComplete="off"
+                spellCheck="false"
+                aria-label="Terminal input"
+              />
+              <span className="terminal-cursor">█</span>
+            </div>
           </div>
         </div>
       </div>
