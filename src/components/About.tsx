@@ -8,11 +8,9 @@ import {
   faCss3Alt,
   faJsSquare,
   faNodeJs,
-  faGitAlt,
   faMicrosoft,
   faVuejs,
   faDocker,
-  faAws,
   faJava,
 } from '@fortawesome/free-brands-svg-icons';
 import { faDatabase } from '@fortawesome/free-solid-svg-icons';
