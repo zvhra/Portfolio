@@ -26,44 +26,39 @@ interface Skill {
   color: string;
   isImage: boolean;
   imagePath?: string;
-  category: 'frontend' | 'backend' | 'tools';
+  proficiency: 'proficient' | 'advanced' | 'familiar';
 }
 
-const frontendSkills: Skill[] = [
-  { name: 'HTML5', icon: faHtml5, color: '#E34F26', isImage: false, category: 'frontend' },
-  { name: 'CSS3', icon: faCss3Alt, color: '#1572B6', isImage: false, category: 'frontend' },
-  { name: 'JavaScript', icon: faJsSquare, color: '#F7DF1E', isImage: false, category: 'frontend' },
-  { name: 'TypeScript', icon: null, color: '#3178C6', isImage: true, imagePath: '/typescript.svg', category: 'frontend' },
-  { name: 'React', icon: faReact, color: '#61DAFB', isImage: false, category: 'frontend' },
-  { name: 'Vue.js', icon: faVuejs, color: '#4FC08D', isImage: false, category: 'frontend' },
-  { name: 'Tailwind CSS', icon: null, color: '#06B6D4', isImage: true, imagePath: '/Tailwind_CSS_Logo.svg', category: 'frontend' },
+const proficientSkills: Skill[] = [
+  { name: 'C#', icon: faMicrosoft, color: '#239120', isImage: false, proficiency: 'proficient' },
+  { name: '.NET Core', icon: faMicrosoft, color: '#512BD4', isImage: false, proficiency: 'proficient' },
+  { name: 'ASP.NET', icon: faMicrosoft, color: '#512BD4', isImage: false, proficiency: 'proficient' },
+  { name: 'SQL', icon: faDatabase, color: '#CC2927', isImage: false, proficiency: 'proficient' },
+  { name: 'React', icon: faReact, color: '#61DAFB', isImage: false, proficiency: 'proficient' },
+  { name: 'Python', icon: faPython, color: '#3776AB', isImage: false, proficiency: 'proficient' },
 ];
 
-const backendSkills: Skill[] = [
-  { name: 'Node.js', icon: faNodeJs, color: '#339933', isImage: false, category: 'backend' },
-  { name: 'Python', icon: faPython, color: '#3776AB', isImage: false, category: 'backend' },
-  { name: 'Java', icon: faJava, color: '#ED8B00', isImage: false, category: 'backend' },
-  { name: 'C#', icon: faMicrosoft, color: '#239120', isImage: false, category: 'backend' },
-  { name: '.NET Core', icon: faMicrosoft, color: '#512BD4', isImage: false, category: 'backend' },
-  { name: 'ASP.NET', icon: faMicrosoft, color: '#512BD4', isImage: false, category: 'backend' },
-  { name: 'MongoDB', icon: faDatabase, color: '#47A248', isImage: false, category: 'backend' },
-  { name: 'SQL Server', icon: faDatabase, color: '#CC2927', isImage: false, category: 'backend' },
-  { name: 'Docker', icon: faDocker, color: '#2496ED', isImage: false, category: 'backend' },
-  { name: 'AWS', icon: faAws, color: '#FF9900', isImage: false, category: 'backend' },
-  { name: 'Azure', icon: faMicrosoft, color: '#0078D4', isImage: false, category: 'backend' },
+const advancedSkills: Skill[] = [
+  { name: 'HTML', icon: faHtml5, color: '#E34F26', isImage: false, proficiency: 'advanced' },
+  { name: 'CSS', icon: faCss3Alt, color: '#1572B6', isImage: false, proficiency: 'advanced' },
+  { name: 'JavaScript', icon: faJsSquare, color: '#F7DF1E', isImage: false, proficiency: 'advanced' },
+  { name: 'TypeScript', icon: null, color: '#3178C6', isImage: true, imagePath: '/typescript.svg', proficiency: 'advanced' },
+  { name: 'Vue.js', icon: faVuejs, color: '#4FC08D', isImage: false, proficiency: 'advanced' },
+  { name: 'TailwindCSS', icon: null, color: '#06B6D4', isImage: true, imagePath: '/Tailwind_CSS_Logo.svg', proficiency: 'advanced' },
+  { name: 'Node.js', icon: faNodeJs, color: '#339933', isImage: false, proficiency: 'advanced' },
+  { name: 'MongoDB', icon: faDatabase, color: '#47A248', isImage: false, proficiency: 'advanced' },
 ];
 
-const toolsSkills: Skill[] = [
-  { name: 'VS Code', icon: null, color: '#007ACC', isImage: false, category: 'tools' },
-  { name: 'Rider', icon: null, color: '#000000', isImage: false, category: 'tools' },
-  { name: 'Eclipse', icon: null, color: '#2C2255', isImage: false, category: 'tools' },
-  { name: 'Git', icon: faGitAlt, color: '#F05032', isImage: false, category: 'tools' },
+const familiarSkills: Skill[] = [
+  { name: 'Java', icon: faJava, color: '#ED8B00', isImage: false, proficiency: 'familiar' },
+  { name: 'Docker', icon: faDocker, color: '#2496ED', isImage: false, proficiency: 'familiar' },
+  { name: 'Azure', icon: faMicrosoft, color: '#0078D4', isImage: false, proficiency: 'familiar' },
 ];
 
 const skillCategories = [
-  { title: 'Frontend', skills: frontendSkills },
-  { title: 'Backend', skills: backendSkills },
-  { title: 'Tools', skills: toolsSkills },
+  { title: 'Proficient', skills: proficientSkills },
+  { title: 'Advanced', skills: advancedSkills },
+  { title: 'Familiar', skills: familiarSkills },
 ];
 
 export default function About() {

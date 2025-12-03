@@ -81,10 +81,9 @@ const TerminalPage = () => {
       description: 'View my tech stack',
       execute: () => {
         return `Technologies I work with:
-  • Frontend: HTML5, CSS3, JavaScript, React, Next.js, TailwindCSS
-  • Backend: Node.js, Python, C#, Java
-  • Tools: Git, VS Code, Terminal
-  • Currently learning: Advanced React patterns, System design`;
+  • Proficient: C#, .NET Core, ASP.NET, SQL, React, Python
+  • Advanced: HTML, CSS, JavaScript, TypeScript, Vue.js, TailwindCSS, Node.js, MongoDB
+  • Familiar: Java, Docker, Azure`;
       },
     },
     fact: {
